@@ -3099,14 +3099,15 @@ function reactSelect(This,key,ev){
 
 
 //金额格式化
-function getDecimal(value){
+function amountFormat0(value,dLength,cLength){
     var oldValue=value;
     var value=+value;
     var arr=[];
-    var length=length||2;
+    var dLength=dLength||2;
+    var cLength=cLength||3;
     var zero='';
 
-    for(var i=0;i<length;i++){
+    for(var i=0;i<dLength;i++){
         zero+='0';
     }
 
@@ -3115,11 +3116,11 @@ function getDecimal(value){
         value=value.split('.');
         value[0]=value[0].split('');
         value[1]=(value[1]||'')+zero;
-        value[1]=value[1].substring(0,length);
+        value[1]=value[1].substring(0,dLength);
 
         arr.unshift('.',value[1]);
-        while(value[0].length>3){
-            arr.unshift(',',value[0].splice(value[0].length-3,3).join(''));
+        while(value[0].length>cLength){
+            arr.unshift(',',value[0].splice(value[0].length-cLength,cLength).join(''));
         }
 
         arr=value[0].join('')+arr.join('');
@@ -3647,22 +3648,6 @@ var nativeApi={
 
         }
     },
-    tokenError:function(){//登录token失效
-        var href=encodeURIComponent(window.location.href);
-
-        if(lStore.get('app')){
-            window.location.href='js://tokenError?url='+href;
-        }else{
-
-        }
-    },
-    toPerfectInfo:function(){//去完善信息页面
-        if(lStore.get('app')){
-            window.location.href='js://userInfoError';
-        }else{
-
-        }
-    },
     toPay:function(parent,payType,body){//支付兼容原生h5
         var body=encodeURIComponent(body);
 
@@ -3757,7 +3742,7 @@ export{
         reactCheck,//复选框
         reactSelect,//下拉框
 
-        getDecimal,
+        amountFormat0,
         limitLength,
         colorPrice,
         shortDate,
