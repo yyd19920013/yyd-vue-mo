@@ -3099,15 +3099,14 @@ function reactSelect(This,key,ev){
 
 
 //金额格式化
-function amountFormat0(value,dLength,cLength){
+function getDecimal(value){
     var oldValue=value;
     var value=+value;
     var arr=[];
-    var dLength=dLength||2;
-    var cLength=cLength||3;
+    var length=length||2;
     var zero='';
 
-    for(var i=0;i<dLength;i++){
+    for(var i=0;i<length;i++){
         zero+='0';
     }
 
@@ -3116,11 +3115,11 @@ function amountFormat0(value,dLength,cLength){
         value=value.split('.');
         value[0]=value[0].split('');
         value[1]=(value[1]||'')+zero;
-        value[1]=value[1].substring(0,dLength);
+        value[1]=value[1].substring(0,length);
 
         arr.unshift('.',value[1]);
-        while(value[0].length>cLength){
-            arr.unshift(',',value[0].splice(value[0].length-cLength,cLength).join(''));
+        while(value[0].length>3){
+            arr.unshift(',',value[0].splice(value[0].length-3,3).join(''));
         }
 
         arr=value[0].join('')+arr.join('');
@@ -3300,6 +3299,8 @@ function axiosWrap(option){
 
                     if(data.code==200){
                         option.success&&option.success(data);
+                    }else if(data.code==505){
+                        nativeApi.toPerfectInfo();
                     }else{
                         if(!option.noHint){
                             if(data.msg){
@@ -3319,13 +3320,12 @@ function axiosWrap(option){
                 if(error.response){
                     var hint=true;
 
-                    for(var i=0;i<noLoginStatus.length;i++){
-                        if(error.response.status==noLoginStatus[i]){
-                            hint=false;
-                            if(!option.noToLogin){
-                                nativeApi.toLogin();
-                            }
-                            break;
+                    if(noLoginStatus.indexOf(error.response.status)!=-1){
+                        hint=false;
+                        if(option.headers['X-Access-Token']){
+                            nativeApi.tokenError();
+                        }else if(!option.noToLogin){
+                            nativeApi.toLogin();
                         }
                     }
 
@@ -3377,7 +3377,7 @@ function axiosWrap(option){
                     return item!=200;
                 });
                 codeFail=codeArr.filter(function(item,index){
-                    return item!=0;
+                    return item!=200;
                 });
 
                 all.fail&&all.fail(statusFail,codeFail);
@@ -3387,6 +3387,8 @@ function axiosWrap(option){
 
                     if(codeFail&&codeFail.length==0){
                         all.success&&all.success.apply(null,dataArr);
+                    }else if(codeFail.indexOf(505)!=-1){
+                        nativeApi.toPerfectInfo();
                     }else{
                         if(!all.noHint){
                             alerts('请求代码错误');
@@ -3403,11 +3405,12 @@ function axiosWrap(option){
             if(error.response){
                 var hint=true;
 
-                for(var i=0;i<noLoginStatus.length;i++){
-                    if(error.response.status==noLoginStatus[i]){
-                        hint=false;
+                if(noLoginStatus.indexOf(error.response.status)!=-1){
+                    hint=false;
+                    if(option.headers['X-Access-Token']){
+                        nativeApi.tokenError();
+                    }else if(!option.noToLogin){
                         nativeApi.toLogin();
-                        break;
                     }
                 }
 
@@ -3644,6 +3647,22 @@ var nativeApi={
 
         }
     },
+    tokenError:function(){//登录token失效
+        var href=encodeURIComponent(window.location.href);
+
+        if(lStore.get('app')){
+            window.location.href='js://tokenError?url='+href;
+        }else{
+
+        }
+    },
+    toPerfectInfo:function(){//去完善信息页面
+        if(lStore.get('app')){
+            window.location.href='js://userInfoError';
+        }else{
+
+        }
+    },
     toPay:function(parent,payType,body){//支付兼容原生h5
         var body=encodeURIComponent(body);
 
@@ -3738,7 +3757,7 @@ export{
         reactCheck,//复选框
         reactSelect,//下拉框
 
-        amountFormat0,
+        getDecimal,
         limitLength,
         colorPrice,
         shortDate,
