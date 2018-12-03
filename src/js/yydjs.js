@@ -831,8 +831,8 @@ function getSearch(key,str){
 };
 
 //json克隆副本
-function Json(json){
-    return json?JSON.parse(JSON.stringify(json)):'';
+function copyJson(json){
+    return json?JSON.parse(JSON.stringify(json)):json;
 };
 
 //判断设备跳转不同地址
@@ -3787,7 +3787,7 @@ export{
         computed,
         cBub,
         pDef,
-        Json,
+        copyJson,
         isPhone,
         isWeixin,
         isSafari,
