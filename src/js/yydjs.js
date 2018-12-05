@@ -3335,6 +3335,10 @@ function axiosWrap(option){
                         changeRefresh(true,error.response.status);
                         option.error&&option.error(error.response);
                     }
+                }else if(error.code=='ECONNABORTED'){
+                    alerts('请求超时');
+                    changeRefresh(true,'请求超时');
+                    option.error&&option.error(error);
                 }
             });
         }else{
@@ -3420,6 +3424,10 @@ function axiosWrap(option){
                     changeRefresh(true,error.response.status);
                     all.error&&all.error(error.response);
                 }
+            }else if(error.code=='ECONNABORTED'){
+                alerts('请求超时');
+                changeRefresh(true,'请求超时');
+                all.error&&all.error(error);
             }
         });
     }else{
