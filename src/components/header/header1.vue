@@ -97,7 +97,7 @@
             rightClick(){
                 let {path,click}=this.right;
 
-                path&&this.router.push(path);
+                path&&this.$router.push(path);
                 click&&click();
             },
         },
