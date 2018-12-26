@@ -1,5 +1,4 @@
 // JavaScript Document
-import $ from 'jquery';
 import Decimal from 'yyd-decimal';
 import axios from 'axios';
 import CONFIG from 'config';
@@ -3752,6 +3751,42 @@ function controlBodyScroll(disableScroll,goTop){
     }
 };
 
+//重写section[class^="content"]的border-bottom-width样式和footer[class^="footer"]的bottom样式
+//把rewriteBorderBottomFn函数放在router.afterEach钩子里执行
+var rewriteBorderBottomFn=rewriteBorderBottom();
+function rewriteBorderBottom(){
+    var rewrited=false;
+    var oldTotalHeight=0;
+    var timer=null;
+
+    return function(){
+        clearTimeout(timer);
+        timer=setTimeout(()=>{
+            var oHeader=(QSA('header[class^="header"]')||[])[0];
+            var oFooter=(QSA('footer[class^="footer"]')||[])[0];
+            var iTH=oHeader?parseInt(getStyle(oHeader,'height')):0;
+            var iBH=oFooter?parseInt(getStyle(oFooter,'height')):0;
+            var totalHeight=iTH+iBH;
+
+            if(!rewrited||(rewrited&&oldTotalHeight!=totalHeight)){
+                rewrited=true;
+                oldTotalHeight=totalHeight;
+                var oStyle=document.createElement('style');
+
+                oStyle.innerHTML=`
+                    section[class^="content"]{
+                        border-bottom-width: ${iTH+iBH}px!important;
+                    }
+                    footer[class^="footer"]{
+                        bottom: ${iTH}px!important;
+                    }
+                `;
+                document.head.appendChild(oStyle);
+            }
+        },150);
+    };
+};
+
 //原生和h5方法判断
 var nativeApi={
     changeStatusBarColor:function(index){//改变原生状态栏主题颜色
@@ -3952,5 +3987,6 @@ export{
         hasPrevHistoryPageFn,
         webviewRefresh,
         controlBodyScroll,
+        rewriteBorderBottomFn,
         nativeApi,
     };

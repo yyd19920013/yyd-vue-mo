@@ -7,14 +7,12 @@ import store from './store';
 
 import header1 from 'components/header/header1';
 import footer1 from 'components/footer/footer1';
-import footer2 from 'components/footer/footer2';
-import footer3 from 'components/footer/footer3';
 
 import {XDialog,AlertPlugin,ConfirmPlugin} from 'src/VUX'
 import fastclick from 'fastclick';
 import * as yyd from 'js/yydjs';
 import * as filter from './filter';
-import {QSA,alerts,consoleNull,htmlFontSize,networkHandle,openMoblieDebug,bind,unbind,pDef,lStore,sStore,isPhone,strToJson,controlBodyScroll,hasPrevHistoryPageFn,webviewRefresh} from 'js/yydjs';
+import {QSA,alerts,consoleNull,htmlFontSize,networkHandle,openMoblieDebug,bind,unbind,pDef,lStore,sStore,isPhone,strToJson,hasPrevHistoryPageFn,webviewRefresh,rewriteBorderBottomFn} from 'js/yydjs';
 import {URL,findDic} from 'services';
 
 //处理点击延迟
@@ -26,8 +24,7 @@ if(noNative){
 }
 
 //调用插件
-Vue.use(VueRouter);
-Vue.use(Vuex);
+// Vue.use(VueRouter);
 Vue.use(AlertPlugin);
 Vue.use(ConfirmPlugin);
 
@@ -107,8 +104,6 @@ MyPlugin.install=function(Vue,options){
         components:{
             header1,
             footer1,
-            footer2,
-            footer3,
         },
     });
 
@@ -255,6 +250,9 @@ router.afterEach((to,from)=>{
     //记录历史记录
     hasPrevHistoryPageFn.record();
 
+    //重写borderBottom样式
+    rewriteBorderBottomFn();
+
     //给#号前面加上问号(解决微信支付无法定位当前网址支付失败)
     const solveWxPay=()=>{
         let arr=window.location.href.split('#');
@@ -267,9 +265,9 @@ router.afterEach((to,from)=>{
 
     //根据meta的传值执行不同操作
     const metaHandle=()=>{
-        if(!to.meta.keepPos||to.query.goTop){//允许body滚动，并回到顶部
-            controlBodyScroll(false,true);
-        }
+        // if(!to.meta.keepPos||to.query.goTop){//允许body滚动，并回到顶部
+        //     controlBodyScroll(false,true);
+        // }
     };
     metaHandle();
 

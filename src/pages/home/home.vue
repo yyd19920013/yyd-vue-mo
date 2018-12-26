@@ -77,6 +77,10 @@
                 class="inquiry"
             ></router-link>
         </section>
+
+        <footer1
+
+        />
     </div>
 </template>
 

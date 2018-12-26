@@ -23,12 +23,14 @@
 
     .footer1{
         height: 50px;
+        background-color: #fff;
+        border-top: $border1;
         .footerWrap{
             width: 100%;
             height: 50px;
             line-height: 50px;
             text-align: center;
-            position: fixed;
+            position: absolute;
             left: 0;
             bottom: 0;
             z-index: 100;

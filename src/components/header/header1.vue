@@ -114,7 +114,7 @@
             height:$height1;
             line-height:$height1;
             background-color:$main;
-            position:fixed;
+            position:absolute;
             left: 0;
             top: 0;
             z-index: 100;

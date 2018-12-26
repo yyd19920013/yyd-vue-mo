@@ -74,7 +74,13 @@ var webpackConfig = {
         }
       }
     ]
-  }
+  },
+  externals:{
+    'vue':'Vue',
+    'vue-router':'VueRouter',
+    'vuex':'Vuex',
+    'axios':'axios',
+  },
 }
 
 module.exports = vuxLoader.merge(webpackConfig, {
