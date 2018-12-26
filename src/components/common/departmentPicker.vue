@@ -2,21 +2,18 @@
     <div
         :class="{
             departmentPicker:true,
-            active:parent[showName],
+            active:show,
         }"
         :style="{
-            top:(44+statusBarHeight) + 'px',
-            borderBottomWidth:(44+statusBarHeight) + 'px',
+            top:(88+statusBarHeight) + 'px',
+            borderBottomWidth:(88+statusBarHeight) + 'px',
         }"
+        @click="maskClick($event)"
     >
-        <div class="title">
-            <a
-                @click="closeFn(false)"
-            >取消</a>
-            <h2>选择科室</h2>
-        </div>
-
-        <div class="main">
+        <div
+            class="wrap"
+            ref="wrap"
+        >
             <div class="list">
                 <ul>
                     <li
@@ -67,6 +64,7 @@
         /*
             <departmentPicker
                 :parent="this"
+                :show="showDepartmentPicker"
                 :showName="'showDepartmentPicker'"
                 :close="closeFn"
             />
@@ -78,7 +76,12 @@
                 type:Object,
                 default:null,
             },
-            showName:{//父组件data中值的名字，用于控制组件显示（必填）
+            show:{//控制组件显示的值（必填）
+                required:true,
+                type:Boolean,
+                default:false,
+            },
+            showName:{//控制组件显示的值的名字（必填）
                 required:true,
                 type:String,
                 default:false,
@@ -151,6 +154,13 @@
                     standardDeptId:list1[insideCIndex1]&&list1[insideCIndex1].stardardDeptId,
                 },'departmentPicker');
             },
+            maskClick(ev){
+                let {target}=ev;
+
+                if(!this.$refs.wrap.contains(target)){
+                    this.closeFn();
+                }
+            },
             pickList(item,index){
                 this.insideCIndex=index;
                 this.getList1(item.stardardDeptId);
@@ -170,43 +180,20 @@
         width: 100%;
         height: 100vh;
         border-bottom: $height1 solid transparent;
-        background-color: #fff;
-        position: fixed;
+        padding-bottom: 100px;
+        background-color: rgba(0,0,0,.6);
+        position: absolute;
         left: 0;
-        top: $height1;
+        top: $height1 * 2;
         z-index: 1000;
         display: none;
         &.active{
             display: block;
         }
-        .title{
-            height: $height1;
-            line-height: $height1;
-            border-bottom: $border1;
-            position: relative;
-            z-index: 10;
-            h2{
-                padding: 0 50px;
-                text-align: center;
-            }
-            a{
-                width: 50px;
-                padding-left: $padding;
-                height: 100%;
-                color: #999;
-                position: absolute;
-                left: 0;
-                top: 0;
-            }
-        }
-        .main{
+        .wrap{
             display: flex;
             width: 100%;
-            padding-top: $height1;
             height: 100%;
-            position: absolute;
-            left: 0;
-            top: 0;
             .list{
                 flex: 3.5;
                 background-color: $bg;
@@ -231,6 +218,7 @@
             .list1{
                 flex: 6.5;
                 overflow-y: auto;
+                background-color: #fff;
                 li{
                     margin-left: $padding;
                     height: $height1;

@@ -27,12 +27,16 @@
                 finished:false,
                 onOff:true,
                 firstLoaded:false,
+                parentDom:null,
+                childDom:null,
             }
         },
 
         /*
             <loadMore
                 :parent="this"
+                :parentClass="'parentClass'"
+                :childClass="'childClass'"
                 :dataListName="'dataList'"
                 :api="api"
                 :params="params"
@@ -48,6 +52,16 @@
                 },
             },
             dataListName:{//父组件data里的列表（必填）
+                required:true,
+                type:String,
+                default:'',
+            },
+            parentClass:{//父组件的content元素的class（必填）
+                required:true,
+                type:String,
+                default:'',
+            },
+            childClass:{//子组件的list元素的class（必填）
                 required:true,
                 type:String,
                 default:'',
@@ -99,6 +113,9 @@
         },
 
         mounted(){
+            //获取元素
+            this.getDom();
+
             //第一次加载列表
             if(!this.isLimit()){
                 this.getDataList();
@@ -114,11 +131,23 @@
         },
 
         beforeDestroy(){
+            let {parentDom}=this;
+
             this.exist=false;
-            unbind(window,'scroll',this.pullUpList);
+            if(parentDom){
+                unbind(parentDom,'scroll',this.pullUpList);
+            }
         },
 
         methods:{
+            getDom(){
+                let {parentClass,childClass}=this;
+                let parentDom=parentClass&&QSA(`.${parentClass}`)&&QSA(`.${parentClass}`)[0];
+                let childDom=childClass&&QSA(`.${childClass}`)&&QSA(`.${childClass}`)[0];
+
+                this.parentDom=parentDom;
+                this.childDom=childDom;
+            },
             setParams(){
                 for(let i=0;i<this.params.length;i++){
                     this.insideParams[i]=this.params[i];
@@ -127,9 +156,10 @@
             getDataList(endFn){
                 this.api(this.insideParams,(res)=>{
                     if(!this.exist)return;
+                    let {parent,dataListName,parentDom}=this;
 
-                    if(this.parent&&this.parent[this.dataListName]){
-                        this.parent[this.dataListName]=[].concat(this.parent[this.dataListName],this.getListFromRes(res));
+                    if(parent&&parent[dataListName]){
+                        parent[dataListName]=[].concat(parent[dataListName],this.getListFromRes(res));
                     }
 
                     endFn&&endFn(res);
@@ -138,7 +168,9 @@
                         this.firstLoad&&this.firstLoad(res);
 
                         //上拉加载列表
-                        !this.onceLoad&&bind(window,'scroll',this.pullUpList);
+                        if(parentDom){
+                            !this.onceLoad&&bind(parentDom,'scroll',this.pullUpList);
+                        }
                     }
                     this.load&&this.load(res);
                 });
@@ -149,13 +181,15 @@
                 return (!limit&&limit!='0')||(limit&&parent&&parent[dataListName]&&parent[dataListName].length<limit)?false:true;
             },
             pullUpList(){
-                let oH=QSA('#app')[0].offsetHeight;
-                let gH=parseInt(getStyle(QSA('#app')[0],'height'));
-                let tH=oH||gH;
-                let cH=document.documentElement.clientHeight;
-                let sT=document.documentElement.scrollTop||document.body.scrollTop;
+                let {parent,dataListName,parentDom,childDom}=this;
+                let pH=parseInt(getStyle(parentDom,'height'));
+                let pS=parentDom.scrollTop;
+                let cH=parseInt(getStyle(childDom,'height'));
+                let cT=childDom.offsetTop;
+                let pHeight=parseInt(pH+pS);
+                let cHeight=parseInt(cH+cT);
 
-                if(this.onOff&&!this.finished&&cH+sT+50>tH){
+                if(this.onOff&&!this.finished&&pHeight+50>cHeight){
                     this.onOff=false;
                     this.loading=true;
 
@@ -176,7 +210,7 @@
                         this.getDataList((res)=>{
                             this.onOff=true;
                             this.loading=false;
-                            if(this.parent[this.dataListName]&&this.getListFromRes(res)&&this.getListFromRes(res).length==0){
+                            if(parent[dataListName]&&this.getListFromRes(res)&&this.getListFromRes(res).length==0){
                                 this.finished=true;
                             }
                         });

@@ -3,10 +3,10 @@
         @click="maskClick($event)"
         :class="{
             sortPicker:true,
-            active:parent[showName],
+            active:show,
         }"
         :style="{
-            top:(44+statusBarHeight) + 'px',
+            top:(88+statusBarHeight) + 'px',
         }"
     >
         <ul ref="ulList">
@@ -34,7 +34,7 @@
                         sortType:'',
                     },
                     {
-                        name:'接诊量',
+                        name:'咨询量',
                         sortType:'1',
                     },
                     {
@@ -50,6 +50,7 @@
         /*
             <sortPicker
                 :parent="this"
+                :show="showSortPicker"
                 :showName="'showSortPicker'"
                 :close="closeFn"
             />
@@ -61,7 +62,12 @@
                 type:Object,
                 default:null,
             },
-            showName:{//父组件data中值的名字，用于控制组件显示（必填）
+            show:{//控制组件显示的值（必填）
+                required:true,
+                type:Boolean,
+                default:false,
+            },
+            showName:{//控制组件显示的值的名字（必填）
                 required:true,
                 type:String,
                 default:false,
@@ -129,7 +135,7 @@
         height: 100%;
         border-bottom: $height1 * 2 solid transparent;
         background-color: rgba(0,0,0,.6);
-        position: fixed;
+        position: absolute;
         left: 0;
         top: $height1 * 2;
         z-index: 1000;

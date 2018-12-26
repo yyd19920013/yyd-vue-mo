@@ -1,5 +1,5 @@
 <template>
-    <div class="doctorList">
+    <div class="doctorList DoctorList">
         <ul>
             <li v-for="(item,index) in dataList">
                 <router-link
@@ -35,7 +35,7 @@
                                 <span>暂无</span>
                                 <em>{{item.avgScore}}</em>
                             </div>
-                            <span>{{item.consultNum?`接诊量${item.consultNum}`:'接诊量暂无'}}</span>
+                            <span>{{item.consultNum?`咨询量${item.consultNum}`:'咨询量暂无'}}</span>
                         </div>
                         <div class="speciality multiLine-2">
                             擅长：{{item.speciality}}
@@ -43,10 +43,10 @@
                     </div>
                 </router-link>
 
-                <a
-                    class="tel"
-                    @click="consultFn"
-                ></a>
+                <!--<a-->
+                    <!--class="tel"-->
+                    <!--@click="consultFn"-->
+                <!--&gt;</a>-->
             </li>
         </ul>
 
@@ -58,6 +58,8 @@
         <loadMore
             :parent="this"
             :dataListName="'dataList'"
+            :parentClass="parentClass"
+            :childClass="'DoctorList'"
             :api="api"
             :params="params"
             :getListFromRes="getListFromRes"
@@ -90,6 +92,14 @@
         */
 
         props:{
+            parentClass:{//父组件的content元素的class（必填）
+                type:String,
+                default:'',
+            },
+            childClass:{//子组件的list元素的class（必填）
+                type:String,
+                default:'',
+            },
             api:{//请求数据的api（必填）
                 required:true,
                 type:Function,
@@ -133,7 +143,7 @@
                     title:'提示',
                     content:'目前已开通电话助理，是否立即咨询？',
                     onConfirm(){
-                        nativeApi.tel('010-84369221');
+
                     },
                 });
             },

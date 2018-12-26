@@ -1,11 +1,11 @@
 <template>
-    <div class="evaluationList">
+    <div class="evaluationList EvaluationList">
         <ul>
             <li v-for="(item,index) in dataList">
                 <a>
                     <div class="title">
                         <div class="leftContent">
-                            <span>{{item.patientName}}</span>
+                            <span>{{item.patientName&&item.patientName.length>1?item.patientName.substring(0,1)+'**':item.patientName}}</span>
                             <div class="starWrap">
                                 <i
                                     v-for="(item1,index1) in 5"
@@ -40,6 +40,8 @@
         <loadMore
             :parent="this"
             :dataListName="'dataList'"
+            :parentClass="parentClass"
+            :childClass="'EvaluationList'"
             :api="api"
             :params="params"
             :getListFromRes="getListFromRes"
@@ -69,6 +71,14 @@
         */
 
         props:{
+            parentClass:{//父组件的content元素的class（必填）
+                type:String,
+                default:'',
+            },
+            childClass:{//子组件的list元素的class（必填）
+                type:String,
+                default:'',
+            },
             api:{//请求数据的api（必填）
                 required:true,
                 type:Function,

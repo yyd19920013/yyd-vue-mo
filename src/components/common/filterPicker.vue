@@ -3,16 +3,16 @@
         @click="maskClick($event)"
         :class="{
             filterPicker:true,
-            active:parent[showName],
+            active:show,
         }"
         :style="{
-            top:(44+statusBarHeight) + 'px',
+            top:(88+statusBarHeight) + 'px',
         }"
     >
         <div ref="wrap" class="wrap">
             <ul>
                 <li>
-                    <div class="title">问诊类型</div>
+                    <div class="title">咨询类型</div>
                     <div class="main">
                         <span
                             v-for="(item,index) in list"
@@ -101,6 +101,7 @@
         /*
             <filterPicker
                 :parent="this"
+                :show="showfilterPicker"
                 :showName="'showfilterPicker'"
                 :close="closeFn"
                 :cIndex="+params[0].onlineType||0"
@@ -113,7 +114,12 @@
                 type:Object,
                 default:null,
             },
-            showName:{//父组件data中值的名字，用于控制组件显示（必填）
+            show:{//控制组件显示的值（必填）
+                required:true,
+                type:Boolean,
+                default:false,
+            },
+            showName:{//控制组件显示的值的名字（必填）
                 required:true,
                 type:String,
                 default:false,
@@ -200,7 +206,7 @@
         height: 100%;
         border-bottom: $height1 * 2 solid transparent;
         background-color: rgba(0,0,0,.6);
-        position: fixed;
+        position: absolute;
         left: 0;
         top: $height1 * 2;
         z-index: 1000;

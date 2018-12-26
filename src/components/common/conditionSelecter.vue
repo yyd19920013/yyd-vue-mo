@@ -63,9 +63,9 @@
                     }
                 }
 
-                if(index!=-1){
+                if(~index){
                     newValue[index]='不限';
-                }else if(index1!=-1){
+                }else if(~index1&&newValue[index1].length>2){
                     newValue[index1]=newValue[index1].replace('不限','');
                 }
             },
@@ -93,13 +93,14 @@
             text-align: center;
             background-color: #fff;
             border-bottom: $border1;
-            position: fixed;
+            position: absolute;
             left: 0;
             top: $height1;
             z-index: 10;
             li{
                 flex: 1;
                 color: #999;
+                cursor: pointer;
                 span{
                     font-size: 12px;
                 }
