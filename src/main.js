@@ -26,8 +26,7 @@ if(noNative){
 }
 
 //调用插件
-Vue.use(VueRouter);
-Vue.use(Vuex);
+// Vue.use(VueRouter);
 Vue.use(AlertPlugin);
 Vue.use(ConfirmPlugin);
 

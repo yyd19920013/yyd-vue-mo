@@ -1,13 +1,7 @@
 // JavaScript Document
-import $ from 'jquery';
 import Decimal from 'yyd-decimal';
 import axios from 'axios';
 import CONFIG from 'config';
-
-// JavaScript Document
-
-//防止网页被iframe嵌套
-//if(window.top!=window.self)window.top.location=window.self.location;
 
 //工具函数-->
 //原生常用方法封装
