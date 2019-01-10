@@ -42,5 +42,8 @@
 </script>
 
 <style>
-    @import '~css/index.css';
+    @import '//at.alicdn.com/t/font_827303_yjnimd2fl5.css';
+</style>
+<style lang="scss">
+    @import '~css/index.scss';
 </style>

@@ -844,12 +844,13 @@ function goPage(moHref,pcHref){
 //小于375屏幕根节点字体大小与375屏幕保持一致，注意宽度的溢出
 function htmlFontSize(getFontSize){
     function change(){
-        var fontSize=document.documentElement.clientWidth/3.75;
+        var oHtml=document.documentElement;
+        var fontSize=oHtml.clientWidth/3.75;
 
         if(fontSize<100)fontSize=100;
         if(fontSize>208)fontSize=208;
         if(!getFontSize){
-            document.getElementsByTagName('html')[0].style.fontSize=fontSize+'px';
+            oHtml.style.fontSize=fontSize+'px';
         }else{
             return fontSize;
         }
@@ -861,6 +862,15 @@ function htmlFontSize(getFontSize){
     }else{
         return change();
     }
+};
+
+//转换单位为rem
+function unit(num,basic){
+    if(num==0)return 0;
+    var basic=basic||100;
+    var value=num/basic;
+
+    return (value<0.01?0.01:value)+'rem';
 };
 
 
@@ -3894,6 +3904,7 @@ export{
         networkHandle,
         getPos,
         htmlFontSize,
+        unit,
         consoleNull,
         openMoblieDebug,
         routerChange,
