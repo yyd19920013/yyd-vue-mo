@@ -254,6 +254,10 @@ router.afterEach((to,from)=>{
         isLoading:false,
     });
 
+    //关闭vux组件的遮罩
+    vm.$vux.alert.hide();
+    vm.$vux.confirm.hide();
+
     //记录历史记录
     hasPrevHistoryPageFn.record();
 
