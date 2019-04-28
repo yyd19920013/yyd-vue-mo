@@ -1,27 +1,15 @@
 <template>
     <div>
         <section class="content1">
-            <!-- <autoplay1></autoplay1> -->
-
-            <div class="nav1">
-                <ul class="clear">
-                    <li>
-                        <router-link to="/noviceArea">
-                            新手专区
-                        </router-link>
-                    </li>
-                    <li>
-                        <router-link to="/infomation">
-                            资讯
-                        </router-link>
-                    </li>
-                </ul>
-            </div>
+            <richTextEdit
+                :confirm="confirm"
+            />
         </section>
     </div>
 </template>
 
 <script>
+    import richTextEdit from 'components/common/richTextEdit';
     import {setPromise} from 'js/yydjs';
 
     export default{
@@ -50,10 +38,13 @@
                 console.dir(this)
                 this.$refs.toast1.show = true
                 this.hint='这个是弹窗'
-            }
+            },
+            confirm(res){
+                console.log(res);
+            },
         },
 
-        components:{}
+        components:{richTextEdit}
     }
 </script>
 
