@@ -3753,6 +3753,7 @@ function axiosWrap(config){
                 }else{
                     alerts('网络异常'+res.status);
                     changeRefresh(true,res.status);
+                    changeLoading(false);
                     if(reject&&(Type(reject)=='function')){
                         return reject(res);
                     }else{
@@ -3777,6 +3778,7 @@ function axiosWrap(config){
                     if(hint){
                         alerts('网络异常');
                         changeRefresh(true,error.response.status);
+                        changeLoading(false);
                         if(reject&&(Type(reject)=='function')){
                             return reject(error.response)
                         }else{
