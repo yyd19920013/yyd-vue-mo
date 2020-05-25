@@ -5,7 +5,7 @@ var config = require('../config')
 var vueLoaderConfig = require('./vue-loader.conf')
 var vuxLoader = require('vux-loader')
 
-function resolve (dir) {
+function resolve(dir) {
   return path.join(__dirname, '..', dir)
 }
 
@@ -16,9 +16,9 @@ var webpackConfig = {
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
-    publicPath: process.env.NODE_ENV === 'production'
-      ? config.build.assetsPublicPath
-      : config.dev.assetsPublicPath
+    publicPath: process.env.NODE_ENV === 'production' ?
+      config.build.assetsPublicPath :
+      config.dev.assetsPublicPath
   },
   resolve: {
     extensions: ['.js', '.vue', '.json'],
@@ -38,8 +38,7 @@ var webpackConfig = {
     }
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.vue$/,
         loader: 'vue-loader',
         options: vueLoaderConfig
@@ -53,8 +52,8 @@ var webpackConfig = {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
         include: [
-          /src/,//表示在src目录下的css需要编译
-          '/node_modules/element-ui/lib/'   //增加此项
+          /src/, //表示在src目录下的css需要编译
+          '/node_modules/element-ui/lib/' //增加此项
         ],
       },
       {
@@ -75,11 +74,11 @@ var webpackConfig = {
       }
     ]
   },
-  externals:{
-    'vue':'Vue',
-    'vue-router':'VueRouter',
-    'vuex':'Vuex',
-    'axios':'axios',
+  externals: {
+    'vue': 'Vue',
+    'vue-router': 'VueRouter',
+    'vuex': 'Vuex',
+    'axios': 'axios',
   },
 }
 
